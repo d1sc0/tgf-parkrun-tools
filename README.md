@@ -14,4 +14,8 @@
 3. create a .env file at root with following params
    UNAME = parkrun username
    PWORD = parkrun password
-   EVENTID = parkrun event ID (can be obtained from parkrun wiki)
+
+For volunteer roster file..
+node vols.js date=20211030
+
+will create roster20211030.csv in .outputs/

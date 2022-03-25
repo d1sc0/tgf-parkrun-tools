@@ -25,6 +25,7 @@ Parkrun.auth(process.env.UNAME, process.env.PWORD, function (client, err) {
         ...roster.map(item => [
           item._eventNumber,
           item._eventDate,
+          item._athleteID,
           item._taskID,
           item._rosterID,
           item._taskName,
@@ -37,7 +38,9 @@ Parkrun.auth(process.env.UNAME, process.env.PWORD, function (client, err) {
 
       // write out a file
       fs.writeFile('./outputs/roster' + eventDate + '.csv', rosterCsv, err => {
-        console.log(err || rosterCsv.length + ' result file processed! ');
+        console.log(
+          err || './outputs/roster' + eventDate + '.csv created successfully!'
+        );
       });
     });
   } else console.log(err);
