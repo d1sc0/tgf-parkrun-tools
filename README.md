@@ -2,10 +2,10 @@
 
 ## to-do list
 
-- update script to use copy of tweaked parkrun.js - done
+- update script to use copy of tweaked parkrun.js API implementation - done
+- turn object array into csv - done
 - simplify, work on creating a single file per event (using a parameter)
-- turn array of objects into csv
-- maybe recreate for results. Single script. event number and then events of results
+- maybe re-create for results
 
 ## to use
 
