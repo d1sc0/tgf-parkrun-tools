@@ -5,11 +5,10 @@ dotenv.config();
 
 Parkrun.auth(process.env.UNAME, process.env.PWORD, function (client, err) {
   if (!err) {
-    // parkrun event ID for Great Field (obtained from parkrun wiki)
-    const tgfId = 2927;
-    const eventDate = '20211030';
-
-    const eventDetails = client.getRoster(tgfId, eventDate);
+    const eventDetails = client.getRoster(
+      process.env.EVENTID,
+      process.env.EVENTDATE
+    );
     eventDetails.then(roster => {
       const rosterCsv = [
         [
@@ -37,11 +36,18 @@ Parkrun.auth(process.env.UNAME, process.env.PWORD, function (client, err) {
         .join('\n');
 
       // write out a file
-      fs.writeFile('./outputs/roster' + eventDate + '.csv', rosterCsv, err => {
-        console.log(
-          err || './outputs/roster' + eventDate + '.csv created successfully!'
-        );
-      });
+      fs.writeFile(
+        './outputs/roster' + process.env.EVENTDATE + '.csv',
+        rosterCsv,
+        err => {
+          console.log(
+            err ||
+              './outputs/roster' +
+                process.env.EVENTDATE +
+                '.csv created successfully!'
+          );
+        }
+      );
     });
   } else console.log(err);
 });

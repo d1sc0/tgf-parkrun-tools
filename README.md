@@ -12,10 +12,17 @@
 1. npm install
 2. create a foler in app root called 'outputs'
 3. create a .env file at root with following params
-   UNAME = parkrun username
-   PWORD = parkrun password
+   ```
+    UNAME=username // parkrun username
+    PWORD=password // parkrun password
+    EVENTID=2927 //parkrun event ID (can be obtained from parkrun wiki)
+    EVENTDATE=20211030 // date you want to process
+   ```
 
-For volunteer roster file..
-node vols.js date=20211030
+run...
+
+```
+node vols.js
+```
 
 will create roster20211030.csv in .outputs/
