@@ -7,7 +7,7 @@
 - simplify, work on creating a single file per event (using a parameter)
 - maybe re-create for results
 
-## to use
+## setup to grab rosters
 
 1. npm install
 2. create a foler in app root called 'outputs'
@@ -26,3 +26,10 @@ node vols.js
 ```
 
 will create roster20211030.csv in .outputs/
+
+if you create multiple files you can merge them using the following terminal command on mac
+
+```
+cd outputs
+cat *.csv > combined.csv
+```
