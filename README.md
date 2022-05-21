@@ -28,3 +28,9 @@ from terminal run...
 ```
 node allRosters.js
 ```
+
+or for both ...
+
+```
+npm run update_stats
+```
