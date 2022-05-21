@@ -13,19 +13,19 @@ jobs:
       id-token: 'write'
     
   steps:
-    - id: 'Checkout Repo'
+    - id: 'Actions Checkout'
       uses: actions/checkout@master
 
     - id: 'Install Dependencies'
       run: npm install
 
     - id: 'Build'
-      run: npm run update_stats
+      run: npm run update_stats 
 
     - id: 'Auth'
       uses: 'google-github-actions/auth@v0'
       with:
-        credentials_json: '${{ secrets.GCP_SECRET }}'
+        service_account: 'tgfparkrun-github@tgfparkrun.iam.gserviceaccount.com'
 
     - id: 'Upload-folder'
       uses: 'google-github-actions/upload-cloud-storage@v0'
