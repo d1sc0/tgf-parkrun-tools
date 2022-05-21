@@ -24,6 +24,7 @@ jobs:
       env:
         UNAME: '${{ secrets.UNAME }}'
         PWORD: '${{ secrets.PWORD }}'
+        EVENTID: '${{ secrets.EVENTID }}'
       run: npm run update_stats
 
     - name: Authenticate to Google Cloud
