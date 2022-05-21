@@ -10,6 +10,7 @@ name: Build, Run and move Files to GCP
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    environment: production
     permissions:
       contents: read
       id-token: write
