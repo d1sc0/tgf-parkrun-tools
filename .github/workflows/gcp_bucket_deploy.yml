@@ -7,7 +7,7 @@ name: Build, Run and move Files to GCP
     - cron: '0 22 * * 6'
 
 jobs:
-  run_and_move:
+  build_and_deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
