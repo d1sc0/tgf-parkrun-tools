@@ -1,35 +1,30 @@
 # The Great Field parkrun stats tools
 
-## to-do list
+This is a hobby project to grab some event results and volunteers stats for TGF parkrun ready for some analysis.
 
-- update script to use copy of tweaked parkrun.js API implementation - done
-- turn object array into csv - done
-- simplify, work on creating a single file per event (using a parameter)
-- maybe re-create for results
+## Grab all results and completed volunteers rosters for an event as .csv
 
-## setup to grab rosters
-
-1. npm install
-2. create a foler in app root called 'outputs'
+1. clone the repo and CD into the project folder
+2. run - npm install
 3. create a .env file at root with following params
    ```
     UNAME=username // parkrun username
     PWORD=password // parkrun password
     EVENTID=2927 //parkrun event ID (can be obtained from parkrun wiki)
-    EVENTDATE=20211030 // date you want to process
    ```
 
-run...
+from terminal run...
 
 ```
-node vols.js
+node allRunResults.js
 ```
 
-will create roster20211030.csv in .outputs/
+This will create one .csv for each event in a folder called in '\_runResults' + a single CSV file containing a merged file with all results.
 
-if you create multiple files you can merge them using the following terminal command on mac
+To do the same for volunteers in a folder called '\_completedRosters' + a single CSV file containing a merged file with all rosters.
+
+from terminal run...
 
 ```
-cd outputs
-cat *.csv > combined.csv
+node allRosters.js
 ```

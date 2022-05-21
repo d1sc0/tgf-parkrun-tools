@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.11",
     "dotenv": "^16.0.0",
     "tweaked_parkrun_js": "https://github.com/d1sc0/d1sc0-parkrunjs-tweaked.js/tarball/main/"
   }

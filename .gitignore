@@ -68,3 +68,7 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
+
+# Results Folders
+_runResults
+_completedRosters
