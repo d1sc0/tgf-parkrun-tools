@@ -91,21 +91,24 @@ async function getRosterDetails(client, eventDate, eventDateStr, eventNum) {
 
 // scrape website data for dates
 async function getResultData(eventNum) {
-  const response = await axios.get(
-    'https://www.parkrun.org.uk/thegreatfield/results/' + eventNum,
-    {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36',
-        'Content-Type': 'text/plain;charset=utf-8',
-      },
-    }
-  );
-
-  // parse the html text and extract titles
-  const data = cheerio.load(response.data);
-  const $eventHTML = data('body');
-  const eventDateStr = $eventHTML.find('.Results-header .format-date').text();
-  //return eventDate;
-  return eventDateStr;
+  try {
+    const response = await axios.get(
+      'https://www.parkrun.org.uk/thegreatfield/results/' + eventNum,
+      {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36',
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+      }
+    );
+    // parse the html text and extract titles
+    const data = cheerio.load(response.data);
+    const $eventHTML = data('body');
+    const eventDateStr = $eventHTML.find('.Results-header .format-date').text();
+    //return eventDate;
+    return eventDateStr;
+  } catch (err) {
+    console.log(err); // TypeError: failed to fetch
+  }
 }
