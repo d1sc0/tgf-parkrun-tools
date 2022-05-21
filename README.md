@@ -2,6 +2,10 @@
 
 This is a hobby project to grab some event results and volunteers stats for TGF parkrun ready for some analysis.
 
+## To-do
+
+Try and get Github actions working with Fetch or Axios so can automate on schedule
+
 ## Grab all results and completed volunteers rosters for an event as .csv
 
 1. clone the repo and CD into the project folder
