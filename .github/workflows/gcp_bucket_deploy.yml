@@ -3,9 +3,9 @@
 name: Build, Run and move Files to GCP
 'on':
   workflow_dispatch:
-  schedule:
+  #schedule:
     # Runs "At 22:00 on Saturday." (see https://crontab.guru)
-    - cron: '0 22 * * 6'
+    # - cron: '0 22 * * 6'
 
 jobs:
   build_and_deploy:
