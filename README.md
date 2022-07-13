@@ -38,3 +38,5 @@ or for both ...
 ```
 npm run update_stats
 ```
+
+## So long and thanks for all the fish
