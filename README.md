@@ -42,13 +42,13 @@ npm run update_stats
 To just get individual event .csv and not produce the all file run the following passing in the event number e.g.
 
 ```
-npm getRunResult.js 14
+node getRunResult.js 14
 ```
 
 or
 
 ```
-npm getRoster.js 14
+node getRoster.js 14
 ```
 
 ## So long and thanks for all the fish

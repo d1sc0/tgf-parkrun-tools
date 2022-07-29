@@ -38,7 +38,10 @@ async function processVolunteers(totalEvents, client) {
     await getRosterDetails(client, eventDate, eventDateStr, eventNum).then(
       rosterRows => {
         allResults = allResults.concat(rosterRows);
-        writeCsv('/TGF-volunteers-' + eventNum, rosterRows);
+        //writeCsv('/TGF-volunteers-' + eventNum, rosterRows);
+        console.log(
+          'Volunteer stats for event ' + eventNum + ' successfully parsed!'
+        );
       }
     );
   }

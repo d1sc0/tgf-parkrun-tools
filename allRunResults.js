@@ -33,7 +33,8 @@ async function processResults(totalEvents) {
     await getResultData(eventNum).then(data => {
       const resultRows = processEvent(data);
       allResults = allResults.concat(resultRows);
-      writeCsv('/TGF-results-' + eventNum, resultRows);
+      //writeCsv('/TGF-results-' + eventNum, resultRows);
+      console.log('Run stats for event ' + eventNum + ' successfully parsed!');
     });
   }
   writeCsv('/TGF-results-ALL', allResults);
