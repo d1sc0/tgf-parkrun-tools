@@ -39,4 +39,16 @@ or for both ...
 npm run update_stats
 ```
 
+To just get individual event data an not produce the all file run the followinf passing in the event number e.g.
+
+```
+npm getRunResult.js 14
+```
+
+or
+
+```
+npm getRoster.js 14
+```
+
 ## So long and thanks for all the fish
