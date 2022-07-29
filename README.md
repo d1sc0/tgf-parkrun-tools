@@ -23,9 +23,9 @@ from terminal run...
 node allRunResults.js
 ```
 
-This will create one .csv for each event in a folder called in '\_runResults' + a single CSV file containing a merged file with all results.
+This will create one a single CSV file containing a merged file with all results.
 
-To do the same for volunteers in a folder called '\_completedRosters' + a single CSV file containing a merged file with all rosters.
+To do the same for volunteers in a folder called '\_completedRosters'
 
 from terminal run...
 
@@ -39,7 +39,7 @@ or for both ...
 npm run update_stats
 ```
 
-To just get individual event data an not produce the all file run the followinf passing in the event number e.g.
+To just get individual event .csv and not produce the all file run the following passing in the event number e.g.
 
 ```
 npm getRunResult.js 14
