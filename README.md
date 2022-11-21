@@ -51,4 +51,25 @@ or
 node getRoster.js 14
 ```
 
-## So long and thanks for all the fish
+## Edit: Adding Juniors
+
+A quick and dirty duplication of scripts to parse results for Juniors
+
+requires additional env parameters
+
+```
+ JUNAME=username // parkrun username
+ JPWORD=password // parkrun password
+ JEVENTID=3095 //parkrun event ID (can be obtained from parkrun wiki)
+```
+
+and folders '\_JnrResults' and '\_JnrRosters'
+
+Scripts run same as above but will be run as
+
+```
+node JnrAllRosters.js
+node JnrAllRunResults.js
+node JnrGetRoster.js 14
+node JnrGetRunResult.js 14
+```
