@@ -23,9 +23,9 @@ from terminal run...
 node allRunResults.js
 ```
 
-This will create one a single CSV file containing a merged file with all results.
+This will create one a single CSV file containing a merged file with all results in a folder called '\_Results'.
 
-To do the same for volunteers in a folder called '\_completedRosters'
+To do the same for volunteers in a folder called '\_Rosters'
 
 from terminal run...
 

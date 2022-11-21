@@ -70,5 +70,7 @@ yarn-error.log
 .yarn-integrity
 
 # Results Folders
-_runResults
-_completedRosters
+_Results
+_Rosters
+_JnrResults
+_JnrRosters

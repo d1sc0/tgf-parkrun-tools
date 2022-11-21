@@ -11,7 +11,7 @@ const password = process.env.PWORD;
 const parkrunEventId = process.env.EVENTID;
 
 //create outputs folders
-const volResults = './_completedRosters';
+const volResults = './_Rosters';
 if (!fs.existsSync(volResults)) {
   fs.mkdirSync(volResults);
 }

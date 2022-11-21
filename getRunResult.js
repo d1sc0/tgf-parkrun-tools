@@ -11,7 +11,7 @@ const password = process.env.PWORD;
 const parkrunEventId = process.env.EVENTID;
 
 //create outputs folders
-const runResults = './_runResults';
+const runResults = './_Results';
 if (!fs.existsSync(runResults)) {
   fs.mkdirSync(runResults);
 }

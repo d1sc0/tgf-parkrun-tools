@@ -6,12 +6,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // set required values from .env
-const userName = process.env.UNAME;
-const password = process.env.PWORD;
-const parkrunEventId = process.env.EVENTID;
+const userName = process.env.JUNAME;
+const password = process.env.JPWORD;
+const parkrunEventId = process.env.JEVENTID;
 
 //create outputs folders
-const runResults = './_Results';
+const runResults = './_JnrResults';
 if (!fs.existsSync(runResults)) {
   fs.mkdirSync(runResults);
 }
@@ -76,7 +76,7 @@ async function getParkrunEvent(client) {
 async function getResultData(eventNum) {
   try {
     const response = await axios.get(
-      'https://www.parkrun.org.uk/thegreatfield/results/' + eventNum,
+      'https://www.parkrun.org.uk/thegreatfield-juniors/results/' + eventNum,
       {
         headers: {
           'User-Agent':
