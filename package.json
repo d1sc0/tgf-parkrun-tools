@@ -11,6 +11,7 @@
     "tweaked_parkrun_js": "https://github.com/d1sc0/d1sc0-parkrunjs-tweaked.js/tarball/main/"
   },
   "scripts": {
-    "update_stats": "node allRunResults.js && node allRosters.js"
+    "update_stats": "node allRunResults.js && node allRosters.js",
+    "update_jnr_stats": "node JnrAllRunResults.js && node JnrAllRosters.js"
   }
 }

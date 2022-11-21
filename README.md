@@ -70,6 +70,13 @@ Scripts run same as above but will be run as
 ```
 node JnrAllRosters.js
 node JnrAllRunResults.js
+```
+
+For single collated files or 'npm run update_jnr_stats' for both.
+
+For individual files as below passing event number as a param.
+
+```
 node JnrGetRoster.js 14
 node JnrGetRunResult.js 14
 ```
