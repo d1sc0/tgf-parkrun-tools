@@ -14,6 +14,7 @@
   "scripts": {
     "update_stats": "node getRunResultAll.js && node getRosterAll.js",
     "update_jnr_stats": "node Jnr_getRunResultAll.js && node Jnr_getRosterAll.js",
-    "getLatest": "node getRunResultLatest.js && node Jnr_getRunResultLatest.js && node getRosterLatest.js && node Jnr_getRosterLatest.js"
+    "getLatest": "node getRunResultLatest.js && node Jnr_getRunResultLatest.js && node getRosterLatest.js && node Jnr_getRosterLatest.js",
+    "uploadLatest": "node latestJnrRoster2BQ.js && node latestJnrRun2BQ.js && node latestRoster2BQ.js && node latestRun2BQ.js"
   }
 }

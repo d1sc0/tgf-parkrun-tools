@@ -35,7 +35,7 @@ async function processVolunteers(totalEvents, client) {
     eventDate = await getResultData(eventNum);
     const [day, month, year] = eventDate.split('/');
     const eventDateStr = [year, month, day].join('');
-    const eventDateStr2 = [year, month, day].join('');
+    const eventDateStr2 = [year, month, day].join('-');
     await getRosterDetails(
       client,
       eventDate,

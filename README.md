@@ -86,3 +86,9 @@ To get latest roster and results for both events run
 ```
 npm run getLatest
 ```
+
+To upload to bigQuery
+
+```
+npm run uploadLatest
+```

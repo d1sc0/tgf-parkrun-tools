@@ -2,7 +2,7 @@
 const { BigQuery } = require('@google-cloud/bigquery');
 require('dotenv').config();
 
-async function loadCSVTruncate() {
+async function loadLatest() {
   const creds = JSON.parse(process.env.GA_CREDS || {});
   const bigquery = new BigQuery({
     projectId: creds.project_id,
@@ -37,4 +37,4 @@ async function loadCSVTruncate() {
   }
 }
 
-loadCSVTruncate();
+loadLatest();
