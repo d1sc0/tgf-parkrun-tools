@@ -20,7 +20,7 @@ Try and get Github actions working with Fetch or Axios so can automate on schedu
 from terminal run...
 
 ```
-node allRunResults.js
+node getRunResultAll.js
 ```
 
 This will create one a single CSV file containing a merged file with all results in a folder called '\_Results'.
@@ -30,7 +30,7 @@ To do the same for volunteers in a folder called '\_Rosters'
 from terminal run...
 
 ```
-node allRosters.js
+node getRosterAll.js
 ```
 
 or for both ...
@@ -68,8 +68,8 @@ and folders '\_JnrResults' and '\_JnrRosters'
 Scripts run same as above but will be run as
 
 ```
-node JnrAllRosters.js
-node JnrAllRunResults.js
+node Jnr_getRosterAll.js
+node Jnr_getRunResultAll.js
 ```
 
 For single collated files or 'npm run update_jnr_stats' for both.

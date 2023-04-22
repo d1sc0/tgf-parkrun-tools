@@ -6,12 +6,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // set required values from .env
-const userName = process.env.JUNAME;
-const password = process.env.JPWORD;
-const parkrunEventId = process.env.JEVENTID;
+const userName = process.env.UNAME;
+const password = process.env.PWORD;
+const parkrunEventId = process.env.EVENTID;
 
 //create outputs folders
-const volResults = './_JnrRosters';
+const volResults = './_Rosters';
 if (!fs.existsSync(volResults)) {
   fs.mkdirSync(volResults);
 }
@@ -35,15 +35,20 @@ async function processVolunteers(totalEvents, client) {
     eventDate = await getResultData(eventNum);
     const [day, month, year] = eventDate.split('/');
     const eventDateStr = [year, month, day].join('');
-    await getRosterDetails(client, eventDate, eventDateStr, eventNum).then(
-      rosterRows => {
-        allResults = allResults.concat(rosterRows);
-        //writeCsv('/TGF-volunteers-' + eventNum, rosterRows);
-        console.log(
-          'Volunteer stats for event ' + eventNum + ' successfully parsed!'
-        );
-      }
-    );
+    const eventDateStr2 = [year, month, day].join('');
+    await getRosterDetails(
+      client,
+      eventDate,
+      eventDateStr,
+      eventDateStr2,
+      eventNum
+    ).then(rosterRows => {
+      allResults = allResults.concat(rosterRows);
+      //writeCsv('/TGF-volunteers-' + eventNum, rosterRows);
+      console.log(
+        'Volunteer stats for event ' + eventNum + ' successfully parsed!'
+      );
+    });
   }
   return allResults;
 }
@@ -72,23 +77,31 @@ async function getParkrunEvent(client) {
   return eventDetails;
 }
 
-async function getRosterDetails(client, eventDate, eventDateStr, eventNum) {
-  rosterRows = client.getRoster(parkrunEventId, eventDateStr).then(roster => {
-    const data = [
-      ...roster.map(item => [
-        eventNum,
-        eventDate,
-        item._athleteFirstName,
-        item._athleteLastName,
-        item._athleteID,
-        'https://www.parkrun.org.uk/thegreatfield-juniors/parkrunner/' +
+async function getRosterDetails(
+  client,
+  eventDate,
+  eventDateStr,
+  eventDateStr2,
+  eventNum
+) {
+  rosterRows = client
+    .getRoster(parkrunEventId, eventDateStr, eventDateStr2)
+    .then(roster => {
+      const data = [
+        ...roster.map(item => [
+          eventNum,
+          eventDateStr2,
+          item._athleteFirstName,
+          item._athleteLastName,
           item._athleteID,
-        item._taskID,
-        item._taskName,
-      ]),
-    ];
-    return data;
-  });
+          'https://www.parkrun.org.uk/thegreatfield/parkrunner/' +
+            item._athleteID,
+          item._taskID,
+          item._taskName,
+        ]),
+      ];
+      return data;
+    });
   return rosterRows;
 }
 
@@ -96,7 +109,7 @@ async function getRosterDetails(client, eventDate, eventDateStr, eventNum) {
 async function getResultData(eventNum) {
   try {
     const response = await axios.get(
-      'https://www.parkrun.org.uk/thegreatfield-juniors/results/' + eventNum,
+      'https://www.parkrun.org.uk/thegreatfield/results/' + eventNum,
       {
         headers: {
           'User-Agent':

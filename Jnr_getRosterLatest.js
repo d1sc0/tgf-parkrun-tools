@@ -6,12 +6,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // set required values from .env
-const userName = process.env.UNAME;
-const password = process.env.PWORD;
-const parkrunEventId = process.env.EVENTID;
+const userName = process.env.JUNAME;
+const password = process.env.JPWORD;
+const parkrunEventId = process.env.JEVENTID;
 
 //create outputs folders
-const volResults = './_Rosters';
+const volResults = './_Latest';
 if (!fs.existsSync(volResults)) {
   fs.mkdirSync(volResults);
 }
@@ -21,7 +21,7 @@ Parkrun.auth(userName, password, function (client, err) {
   if (!err) {
     getParkrunEvent(client).then(eventDetails => {
       processVolunteers(eventDetails._totalEvents, client).then(allResults => {
-        writeCsv('/TGF-volunteers-ALL', allResults);
+        writeCsv('/JTGF-latest-roster', allResults);
       });
     });
   } else console.log(err);
@@ -31,20 +31,25 @@ Parkrun.auth(userName, password, function (client, err) {
 async function processVolunteers(totalEvents, client) {
   let allResults = [];
   //loop through event until you hit total events
-  for (let eventNum = 1; eventNum < totalEvents + 1; eventNum++) {
-    eventDate = await getResultData(eventNum);
-    const [day, month, year] = eventDate.split('/');
-    const eventDateStr = [year, month, day].join('');
-    await getRosterDetails(client, eventDate, eventDateStr, eventNum).then(
-      rosterRows => {
-        allResults = allResults.concat(rosterRows);
-        //writeCsv('/TGF-volunteers-' + eventNum, rosterRows);
-        console.log(
-          'Volunteer stats for event ' + eventNum + ' successfully parsed!'
-        );
-      }
+  let eventNum = totalEvents;
+  eventDate = await getResultData(eventNum);
+  const [day, month, year] = eventDate.split('/');
+  const eventDateStr = [year, month, day].join('');
+  const eventDateStr2 = [year, month, day].join('');
+  await getRosterDetails(
+    client,
+    eventDate,
+    eventDateStr,
+    eventDateStr2,
+    eventNum
+  ).then(rosterRows => {
+    allResults = allResults.concat(rosterRows);
+    //writeCsv('/TGF-volunteers-' + eventNum, rosterRows);
+    console.log(
+      'Volunteer stats for event ' + eventNum + ' successfully parsed!'
     );
-  }
+  });
+
   return allResults;
 }
 // function to write the finished file
@@ -72,23 +77,31 @@ async function getParkrunEvent(client) {
   return eventDetails;
 }
 
-async function getRosterDetails(client, eventDate, eventDateStr, eventNum) {
-  rosterRows = client.getRoster(parkrunEventId, eventDateStr).then(roster => {
-    const data = [
-      ...roster.map(item => [
-        eventNum,
-        eventDate,
-        item._athleteFirstName,
-        item._athleteLastName,
-        item._athleteID,
-        'https://www.parkrun.org.uk/thegreatfield/parkrunner/' +
+async function getRosterDetails(
+  client,
+  eventDate,
+  eventDateStr,
+  eventDateStr2,
+  eventNum
+) {
+  rosterRows = client
+    .getRoster(parkrunEventId, eventDateStr, eventDateStr2)
+    .then(roster => {
+      const data = [
+        ...roster.map(item => [
+          eventNum,
+          eventDateStr2,
+          item._athleteFirstName,
+          item._athleteLastName,
           item._athleteID,
-        item._taskID,
-        item._taskName,
-      ]),
-    ];
-    return data;
-  });
+          'https://www.parkrun.org.uk/thegreatfield-juniors/parkrunner/' +
+            item._athleteID,
+          item._taskID,
+          item._taskName,
+        ]),
+      ];
+      return data;
+    });
   return rosterRows;
 }
 
@@ -96,7 +109,7 @@ async function getRosterDetails(client, eventDate, eventDateStr, eventNum) {
 async function getResultData(eventNum) {
   try {
     const response = await axios.get(
-      'https://www.parkrun.org.uk/thegreatfield/results/' + eventNum,
+      'https://www.parkrun.org.uk/thegreatfield-juniors/results/' + eventNum,
       {
         headers: {
           'User-Agent':

@@ -11,7 +11,7 @@ const password = process.env.PWORD;
 const parkrunEventId = process.env.EVENTID;
 
 //create outputs folders
-const volResults = './_Rosters';
+const volResults = './_Latest';
 if (!fs.existsSync(volResults)) {
   fs.mkdirSync(volResults);
 }
@@ -20,19 +20,22 @@ if (!fs.existsSync(volResults)) {
 Parkrun.auth(userName, password, function (client, err) {
   if (!err) {
     getParkrunEvent(client).then(eventDetails => {
-      processVolunteers(eventDetails._totalEvents, client);
+      processVolunteers(eventDetails._totalEvents, client).then(allResults => {
+        writeCsv('/TGF-latest-roster', allResults);
+      });
     });
   } else console.log(err);
 });
 
 // process All results
 async function processVolunteers(totalEvents, client) {
-  // grab the event number from node CLI parameter
-  let eventNum = process.argv[2];
+  let allResults = [];
+  //loop through event until you hit total events
+  let eventNum = totalEvents;
   eventDate = await getResultData(eventNum);
   const [day, month, year] = eventDate.split('/');
   const eventDateStr = [year, month, day].join('');
-  const eventDateStr2 = [year, month, day].join('-');
+  const eventDateStr2 = [year, month, day].join('');
   await getRosterDetails(
     client,
     eventDate,
@@ -40,10 +43,15 @@ async function processVolunteers(totalEvents, client) {
     eventDateStr2,
     eventNum
   ).then(rosterRows => {
-    writeCsv('/TGF-volunteers-' + eventNum, rosterRows);
+    allResults = allResults.concat(rosterRows);
+    //writeCsv('/TGF-volunteers-' + eventNum, rosterRows);
+    console.log(
+      'Volunteer stats for event ' + eventNum + ' successfully parsed!'
+    );
   });
-}
 
+  return allResults;
+}
 // function to write the finished file
 function writeCsv(title, rows) {
   //add the row headers for results
@@ -76,22 +84,24 @@ async function getRosterDetails(
   eventDateStr2,
   eventNum
 ) {
-  rosterRows = client.getRoster(parkrunEventId, eventDateStr).then(roster => {
-    const data = [
-      ...roster.map(item => [
-        eventNum,
-        eventDateStr2,
-        item._athleteFirstName,
-        item._athleteLastName,
-        item._athleteID,
-        'https://www.parkrun.org.uk/thegreatfield/parkrunner/' +
+  rosterRows = client
+    .getRoster(parkrunEventId, eventDateStr, eventDateStr2)
+    .then(roster => {
+      const data = [
+        ...roster.map(item => [
+          eventNum,
+          eventDateStr2,
+          item._athleteFirstName,
+          item._athleteLastName,
           item._athleteID,
-        item._taskID,
-        item._taskName,
-      ]),
-    ];
-    return data;
-  });
+          'https://www.parkrun.org.uk/thegreatfield/parkrunner/' +
+            item._athleteID,
+          item._taskID,
+          item._taskName,
+        ]),
+      ];
+      return data;
+    });
   return rosterRows;
 }
 

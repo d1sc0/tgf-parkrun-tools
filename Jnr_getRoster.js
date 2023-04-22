@@ -32,11 +32,16 @@ async function processVolunteers(totalEvents, client) {
   eventDate = await getResultData(eventNum);
   const [day, month, year] = eventDate.split('/');
   const eventDateStr = [year, month, day].join('');
-  await getRosterDetails(client, eventDate, eventDateStr, eventNum).then(
-    rosterRows => {
-      writeCsv('/TGF-volunteers-' + eventNum, rosterRows);
-    }
-  );
+  const eventDateStr2 = [year, month, day].join('-');
+  await getRosterDetails(
+    client,
+    eventDate,
+    eventDateStr,
+    eventDateStr2,
+    eventNum
+  ).then(rosterRows => {
+    writeCsv('/JTGF-volunteers-' + eventNum, rosterRows);
+  });
 }
 
 // function to write the finished file
@@ -64,12 +69,18 @@ async function getParkrunEvent(client) {
   return eventDetails;
 }
 
-async function getRosterDetails(client, eventDate, eventDateStr, eventNum) {
+async function getRosterDetails(
+  client,
+  eventDate,
+  eventDateStr,
+  eventDateStr2,
+  eventNum
+) {
   rosterRows = client.getRoster(parkrunEventId, eventDateStr).then(roster => {
     const data = [
       ...roster.map(item => [
         eventNum,
-        eventDate,
+        eventDateStr2,
         item._athleteFirstName,
         item._athleteLastName,
         item._athleteID,

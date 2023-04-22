@@ -6,12 +6,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // set required values from .env
-const userName = process.env.UNAME;
-const password = process.env.PWORD;
-const parkrunEventId = process.env.EVENTID;
+const userName = process.env.JUNAME;
+const password = process.env.JPWORD;
+const parkrunEventId = process.env.JEVENTID;
 
 //create outputs folders
-const runResults = './_Results';
+const runResults = './_JnrResults';
 if (!fs.existsSync(runResults)) {
   fs.mkdirSync(runResults);
 }
@@ -25,19 +25,14 @@ Parkrun.auth(userName, password, function (client, err) {
   } else console.log(err);
 });
 
-// process All results
+// process results
 async function processResults(totalEvents) {
-  let allResults = [];
-  //loop through event until you hit total events
-  for (let eventNum = 1; eventNum < totalEvents + 1; eventNum++) {
-    await getResultData(eventNum).then(data => {
-      const resultRows = processEvent(data);
-      allResults = allResults.concat(resultRows);
-      //writeCsv('/TGF-results-' + eventNum, resultRows);
-      console.log('Run stats for event ' + eventNum + ' successfully parsed!');
-    });
-  }
-  writeCsv('/TGF-results-ALL', allResults);
+  // grab the event number from node CLI parameter
+  let eventNum = process.argv[2];
+  await getResultData(eventNum).then(data => {
+    const resultRows = processEvent(data);
+    writeCsv('/JTGF-results-' + eventNum, resultRows);
+  });
 }
 
 // function to write the finished file
@@ -76,7 +71,7 @@ async function getParkrunEvent(client) {
 async function getResultData(eventNum) {
   try {
     const response = await axios.get(
-      'https://www.parkrun.org.uk/thegreatfield/results/' + eventNum,
+      'https://www.parkrun.org.uk/thegreatfield-juniors/results/' + eventNum,
       {
         headers: {
           'User-Agent':
@@ -99,7 +94,11 @@ function processEvent(data) {
   const resultRows = [];
   const $eventHTML = data('body');
   const $rows = $eventHTML.find('table tr');
-  const eventDate = $eventHTML.find('.Results-header .format-date').text();
+  const eDate = $eventHTML.find('.Results-header .format-date').text();
+  eventYear = eDate.substring(6, 10);
+  eventMonth = eDate.substring(3, 5);
+  eventDay = eDate.substring(0, 2);
+  const eventDate = eventYear + '-' + eventMonth + '-' + eventDay;
   const eventNum = $eventHTML.find('.Results-header h3 span:eq(2)').text();
   const eventNumber = eventNum.replace(/\D+/g, '');
 
@@ -132,13 +131,13 @@ function processEvent(data) {
 
     //null values for unknowns
     if (runnerName == 'Unknown') {
-      runnerTime = 'null';
+      runnerTime = '';
       runnerSex = 'Unknown';
       runnerAgeGroup = 'Unknown';
-      runnerNoRuns = 'Unknown';
-      runnerNoVols = 'Unknown';
-      runnerAgeGrade = 'Unknown';
-      runnerID = 'Unknown';
+      runnerNoRuns = '';
+      runnerNoVols = '';
+      runnerAgeGrade = '';
+      runnerID = '';
       runnerURL = 'Unknown';
       runnderSexPos = 'Unknown';
     } else {
