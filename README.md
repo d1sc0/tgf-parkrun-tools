@@ -80,3 +80,9 @@ For individual files as below passing event number as a param.
 node JnrGetRoster.js 14
 node JnrGetRunResult.js 14
 ```
+
+To get latest roster and results for both events run
+
+```
+npm run getLatest
+```
