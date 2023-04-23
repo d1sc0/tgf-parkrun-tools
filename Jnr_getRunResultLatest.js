@@ -125,7 +125,12 @@ function processEvent(data) {
     if (runnerTime.length < 6) {
       runnerTime = '00:' + runnerTime;
     }
-    runnerTime = runnerTime + '.000';
+    //runnerTime = runnerTime + '.000';
+    a = runnerTime.split(':'); // split it at the colons
+    // minutes are worth 60 seconds. Hours are worth 60 minutes.
+    var seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
+
+    runnerTime = seconds;
 
     //set runnerID by removing everything but digits, also handle unknowns
     if (typeof runnerURL !== 'null') {
