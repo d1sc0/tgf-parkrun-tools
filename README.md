@@ -77,8 +77,8 @@ For single collated files or 'npm run update_jnr_stats' for both.
 For individual files as below passing event number as a param.
 
 ```
-node JnrGetRoster.js 14
-node JnrGetRunResult.js 14
+node Jnr_getRoster.js 38
+node Jnr_getRunResult.38
 ```
 
 To get latest roster and results for both events run
