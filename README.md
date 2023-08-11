@@ -42,13 +42,8 @@ npm run update_stats
 To just get individual event .csv and not produce the all file run the following passing in the event number e.g.
 
 ```
-node getRunResult.js 14
-```
-
-or
-
-```
-node getRoster.js 14
+node getRunResult.js 88
+node getRoster.js 88
 ```
 
 ## Edit: Adding Juniors
@@ -77,8 +72,8 @@ For single collated files or 'npm run update_jnr_stats' for both.
 For individual files as below passing event number as a param.
 
 ```
-node Jnr_getRoster.js 38
-node Jnr_getRunResult.38
+node Jnr_getRoster.js 48
+node Jnr_getRunResult.js 48
 ```
 
 To get latest roster and results for both events run
@@ -91,4 +86,13 @@ To upload to bigQuery
 
 ```
 npm run uploadLatest
+```
+
+you can upload a specific result to BQ (to solve issues) with the following
+
+```
+node loadRoster2BQ.js 88
+node loadRun2BQ.js 88
+node loadJnrRun2BQ.js 48
+node loadJnrRoster2BQ.js 48
 ```
