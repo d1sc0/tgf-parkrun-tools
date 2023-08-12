@@ -100,7 +100,7 @@ function writeCSV(athletesNew) {
     .map(e => e.join(','))
     .join('\n');
 
-  console.log(athletesCSV);
+  //console.log(athletesCSV);
   fs.writeFile(filepath + 'homeruns.csv', athletesCSV, err => {
     console.log(err || 'homeruns.csv created successfully!');
   });
