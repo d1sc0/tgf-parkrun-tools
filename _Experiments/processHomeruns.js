@@ -40,12 +40,13 @@ Parkrun.auth(userName, password, async function (client, err) {
 
 function processDetails(athletes, client) {
   console.log('parsed csv data:');
-
+  let i = 1;
   const getAthleteLimited = limiter(async athlete => {
     await client.getAthlete(athlete.athleteID).then(res => {
       athlete.athleteHomeID = res._homeRun._id;
       athlete.athleteHomeName = res._homeRun._name;
-      console.log(athlete);
+      console.log(i);
+      i++;
     });
   }, 1000);
 
