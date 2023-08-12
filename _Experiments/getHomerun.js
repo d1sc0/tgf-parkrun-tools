@@ -6,11 +6,11 @@ dotenv.config();
 // set required values from .env
 const userName = process.env.UNAME;
 const password = process.env.PWORD;
-const athleteID = 645983;
+const athleteID = '3751343, 633637';
 // authenticate and grab eventDetails (to get total events count) and then process results
 Parkrun.auth(userName, password, async function (client, err) {
   if (!err) {
-    await client.getAthleteDetails(athleteID).then(athlete => {
+    await client.getAthlete(athleteID).then(athlete => {
       console.log(athlete);
     });
   } else console.log(err);
