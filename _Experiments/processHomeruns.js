@@ -1,6 +1,8 @@
 const fs = require('fs');
 const { parse } = require('csv-parse');
 const Parkrun = require('tweaked_parkrun_js');
+// const { countries } = require('./location_data/countries_data.js');
+const { events } = require('./location_data/event_data.js');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -47,6 +49,16 @@ function processDetails(athletes, client) {
     await client.getAthlete(athlete.athleteID).then(res => {
       athlete.athleteHomeID = res._homeRun._id;
       athlete.athleteHomeName = res._homeRun._name;
+      const byId = item => item.id === athlete.athleteHomeID;
+      if (events.find(byId)) {
+        athlete.athleteHomeGeoLon = events.find(byId).geometry.coordinates[0];
+        athlete.athleteHomeGeoLat = events.find(byId).geometry.coordinates[1];
+        athlete.athleteHomeCountry = events.find(byId).properties.countrycode;
+      } else {
+        athlete.athleteHomeGeoLat = null;
+        athlete.athleteHomeGeoLon = null;
+        athlete.athleteHomeCountry = null;
+      }
       athletesNew.push(athlete);
       console.log(i);
       if (i === athletes.length) {
@@ -55,7 +67,7 @@ function processDetails(athletes, client) {
       }
       i++;
     });
-  }, 1000);
+  }, 500);
 
   athletes.forEach(async athlete => {
     getAthleteLimited(athlete);
@@ -89,12 +101,23 @@ function limiter(fn, wait) {
 function writeCSV(athletesNew) {
   //take athletes object and turn into an array then write back out to csv
   const athletesCSV = [
-    ['athleteID', 'TGFeventCount', 'athleteHomeID', 'athleteHomeName'],
+    [
+      'athleteID',
+      'TGFeventCount',
+      'athleteHomeID',
+      'athleteHomeName',
+      'athleteHomeGeoLon',
+      'athleteHomeGeoLat',
+      'athleteHomeCountry',
+    ],
     ...athletesNew.map(athlete => [
       athlete.athleteID,
       athlete.TGFeventCount,
       athlete.athleteHomeID,
       athlete.athleteHomeName,
+      athlete.athleteHomeGeoLon,
+      athlete.athleteHomeGeoLat,
+      athlete.athleteHomeCountry,
     ]),
   ]
     .map(e => e.join(','))
