@@ -11,7 +11,7 @@ const athleteID = 3751343;
 
 //set values
 const filepath = './_Experiments/';
-const filename = 'shortlist.csv';
+const filename = 'list.csv';
 const athletes = [];
 
 // authenticate and grab eventDetails (to get total events count) and then process results
