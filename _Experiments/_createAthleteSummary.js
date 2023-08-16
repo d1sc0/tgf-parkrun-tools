@@ -9,7 +9,6 @@ dotenv.config();
 // set required values from .env
 const userName = process.env.UNAME;
 const password = process.env.PWORD;
-const athleteID = 3751343;
 
 //set values
 const filepath = './_Experiments/';
