@@ -13,7 +13,8 @@ const athleteID = 3751343;
 
 //set values
 const filepath = './_Experiments/';
-const filename = 'list.csv';
+const filename = 'shortlist.csv';
+const outputname = 'tgf_AthleteSummary.csv';
 const athletes = [];
 
 // authenticate and grab eventDetails (to get total events count) and then process results
@@ -46,7 +47,7 @@ function processDetails(athletes, client) {
   athletesNew = [];
   let i = 1;
   const getAthleteLimited = limiter(async athlete => {
-    await client.getAthlete(athlete.athleteID).then(res => {
+    await client.getAthlete(athlete.athleteID).then(async res => {
       athlete.athleteHomeID = res._homeRun._id;
       athlete.athleteHomeName = res._homeRun._name;
       const byId = item => item.id === athlete.athleteHomeID;
@@ -59,6 +60,14 @@ function processDetails(athletes, client) {
         athlete.athleteHomeGeoLon = null;
         athlete.athleteHomeCountry = null;
       }
+
+      countsObj = await res.getCounts('2927');
+      athlete.athleteFullName = await res.getFullName();
+      athlete.athleteRunCount = countsObj.runCount;
+      athlete.athleteVolCount = countsObj.volCount;
+      athlete.athleteTGFrunCount = countsObj.TGFrunCount;
+      athlete.athleteTGFvolCount = countsObj.TGFvolCount;
+
       athletesNew.push(athlete);
       console.log(i);
       if (i === athletes.length) {
@@ -102,29 +111,37 @@ function writeCSV(athletesNew) {
   //take athletes object and turn into an array then write back out to csv
   const athletesCSV = [
     [
-      'athleteID',
-      'TGFeventCount',
-      'athleteHomeID',
-      'athleteHomeName',
-      'athleteHomeGeoLon',
-      'athleteHomeGeoLat',
-      'athleteHomeCountry',
+      'ID',
+      'FullName',
+      'HomeID',
+      'HomeName',
+      'HomeGeoLon',
+      'HomeGeoLat',
+      'HomeCountry',
+      'RunCount',
+      'VolCount',
+      'TGFRunCount',
+      'TGFVolCount',
     ],
     ...athletesNew.map(athlete => [
       athlete.athleteID,
-      athlete.TGFeventCount,
+      athlete.athleteFullName,
       athlete.athleteHomeID,
       athlete.athleteHomeName,
       athlete.athleteHomeGeoLon,
       athlete.athleteHomeGeoLat,
       athlete.athleteHomeCountry,
+      athlete.athleteRunCount,
+      athlete.athleteVolCount,
+      athlete.athleteTGFrunCount,
+      athlete.athleteTGFvolCount,
     ]),
   ]
     .map(e => e.join(','))
     .join('\n');
 
   //console.log(athletesCSV);
-  fs.writeFile(filepath + 'homeRunData.csv', athletesCSV, err => {
+  fs.writeFile(filepath + outputname, athletesCSV, err => {
     console.log(err || 'homeruns.csv created successfully!');
   });
 }
