@@ -12,8 +12,9 @@ const password = process.env.PWORD;
 
 //set values
 const filepath = './_Experiments/';
-const filename = 'shortlist.csv';
+const filename = 'list.csv';
 const outputname = 'tgf_AthleteSummary.csv';
+const eventNum = 2927; //TGF parkrun event ID
 const athletes = [];
 
 // authenticate and grab eventDetails (to get total events count) and then process results
@@ -60,12 +61,13 @@ function processDetails(athletes, client) {
         athlete.athleteHomeCountry = null;
       }
 
-      countsObj = await res.getTGFCounts();
       athlete.athleteFullName = await res.getFullName();
-      //athlete.athleteRunCount = countsObj.runCount;
-      //athlete.athleteVolCount = countsObj.volCount;
-      athlete.athleteTGFrunCount = countsObj.TGFrunCount;
-      athlete.athleteTGFvolCount = countsObj.TGFvolCount;
+      TGFcountsObj = await res.getTGFCounts(eventNum);
+      countsObj = await res.getCounts();
+      athlete.athleteTGFrunCount = TGFcountsObj.TGFrunCount;
+      athlete.athleteTGFvolCount = TGFcountsObj.TGFvolCount;
+      athlete.athleteRunCount = countsObj.runCount;
+      athlete.athleteVolCount = countsObj.volCount;
 
       athletesNew.push(athlete);
       console.log(i);
@@ -117,8 +119,8 @@ function writeCSV(athletesNew) {
       'HomeGeoLon',
       'HomeGeoLat',
       'HomeCountry',
-      //'RunCount',
-      //'VolCount',
+      'RunCount',
+      'VolCount',
       'TGFRunCount',
       'TGFVolCount',
     ],
@@ -130,8 +132,8 @@ function writeCSV(athletesNew) {
       athlete.athleteHomeGeoLon,
       athlete.athleteHomeGeoLat,
       athlete.athleteHomeCountry,
-      //athlete.athleteRunCount,
-      //athlete.athleteVolCount,
+      athlete.athleteRunCount,
+      athlete.athleteVolCount,
       athlete.athleteTGFrunCount,
       athlete.athleteTGFvolCount,
     ]),
