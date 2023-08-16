@@ -12,7 +12,7 @@ const password = process.env.PWORD;
 
 //set values
 const filepath = './_Experiments/';
-const filename = 'list.csv';
+const filename = 'shortlist.csv';
 const outputname = 'tgf_AthleteSummary.csv';
 const eventNum = 2927; //TGF parkrun event ID
 const athletes = [];
@@ -46,6 +46,7 @@ function processDetails(athletes, client) {
   console.log('parsed csv data:');
   athletesNew = [];
   let i = 1;
+
   const getAthleteLimited = limiter(async athlete => {
     await client.getAthlete(athlete.athleteID).then(async res => {
       athlete.athleteHomeID = res._homeRun._id;
@@ -70,14 +71,14 @@ function processDetails(athletes, client) {
       athlete.athleteVolCount = countsObj.volCount;
 
       athletesNew.push(athlete);
-      console.log(i);
+      console.log(i, athlete);
       if (i === athletes.length) {
         //console.log(athletesNew);
         writeCSV(athletesNew);
       }
       i++;
     });
-  }, 600);
+  }, 1200);
 
   athletes.forEach(async athlete => {
     getAthleteLimited(athlete);
