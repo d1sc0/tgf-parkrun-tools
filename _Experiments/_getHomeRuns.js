@@ -12,7 +12,7 @@ const password = process.env.PWORD;
 
 //set values
 const filepath = './_Experiments/';
-const filename = 'shortlist.csv';
+const filename = 'list.csv';
 const outputname = '_dataHomeRuns.csv';
 const eventNum = 2927; //TGF parkrun event ID
 const athletes = [];
