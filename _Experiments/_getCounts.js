@@ -65,7 +65,7 @@ function processDetails(athletes, client) {
       }
       i++;
     });
-  });
+  }, 500);
 
   athletes.forEach(async athlete => {
     getAthleteLimited(athlete);
