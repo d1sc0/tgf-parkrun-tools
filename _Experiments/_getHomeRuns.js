@@ -13,7 +13,7 @@ const password = process.env.PWORD;
 //set values
 const filepath = './_Experiments/';
 const filename = 'shortlist.csv';
-const outputname = 'tgf_AthleteSummary.csv';
+const outputname = '_dataHomeRuns.csv';
 const eventNum = 2927; //TGF parkrun event ID
 const athletes = [];
 
@@ -63,12 +63,12 @@ function processDetails(athletes, client) {
       }
 
       athlete.athleteFullName = await res.getFullName();
-      TGFcountsObj = await res.getTGFCounts(eventNum);
-      countsObj = await res.getCounts();
-      athlete.athleteTGFrunCount = TGFcountsObj.TGFrunCount;
-      athlete.athleteTGFvolCount = TGFcountsObj.TGFvolCount;
-      athlete.athleteRunCount = countsObj.runCount;
-      athlete.athleteVolCount = countsObj.volCount;
+      //TGFcountsObj = await res.getTGFCounts(eventNum);
+      //countsObj = await res.getCounts();
+      //athlete.athleteTGFrunCount = TGFcountsObj.TGFrunCount;
+      //athlete.athleteTGFvolCount = TGFcountsObj.TGFvolCount;
+      //athlete.athleteRunCount = countsObj.runCount;
+      //athlete.athleteVolCount = countsObj.volCount;
 
       athletesNew.push(athlete);
       console.log(i, athlete);
@@ -78,7 +78,7 @@ function processDetails(athletes, client) {
       }
       i++;
     });
-  }, 1200);
+  }, 500);
 
   athletes.forEach(async athlete => {
     getAthleteLimited(athlete);
@@ -120,10 +120,10 @@ function writeCSV(athletesNew) {
       'HomeGeoLon',
       'HomeGeoLat',
       'HomeCountry',
-      'RunCount',
-      'VolCount',
-      'TGFRunCount',
-      'TGFVolCount',
+      //'RunCount',
+      //'VolCount',
+      //'TGFRunCount',
+      //'TGFVolCount',
     ],
     ...athletesNew.map(athlete => [
       athlete.athleteID,
@@ -133,10 +133,10 @@ function writeCSV(athletesNew) {
       athlete.athleteHomeGeoLon,
       athlete.athleteHomeGeoLat,
       athlete.athleteHomeCountry,
-      athlete.athleteRunCount,
-      athlete.athleteVolCount,
-      athlete.athleteTGFrunCount,
-      athlete.athleteTGFvolCount,
+      //athlete.athleteRunCount,
+      //athlete.athleteVolCount,
+      //athlete.athleteTGFrunCount,
+      //athlete.athleteTGFvolCount,
     ]),
   ]
     .map(e => e.join(','))
