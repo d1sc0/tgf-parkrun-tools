@@ -144,6 +144,6 @@ function writeCSV(athletesNew) {
 
   //console.log(athletesCSV);
   fs.writeFile(filepath + outputname, athletesCSV, err => {
-    console.log(err || outputname + '.csv created successfully!');
+    console.log(err || outputname + ' created successfully!');
   });
 }
