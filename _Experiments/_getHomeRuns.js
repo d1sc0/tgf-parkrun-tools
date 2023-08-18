@@ -63,6 +63,7 @@ function processDetails(athletes, client) {
       }
 
       athlete.athleteFullName = await res.getFullName();
+      athlete.athleteClub = await res.getClubName();
       //TGFcountsObj = await res.getTGFCounts(eventNum);
       //countsObj = await res.getCounts();
       //athlete.athleteTGFrunCount = TGFcountsObj.TGFrunCount;
@@ -115,6 +116,7 @@ function writeCSV(athletesNew) {
     [
       'ID',
       'FullName',
+      'Club Name',
       'HomeID',
       'HomeName',
       'HomeGeoLon',
@@ -128,6 +130,7 @@ function writeCSV(athletesNew) {
     ...athletesNew.map(athlete => [
       athlete.athleteID,
       athlete.athleteFullName,
+      athlete.athleteClub,
       athlete.athleteHomeID,
       athlete.athleteHomeName,
       athlete.athleteHomeGeoLon,
