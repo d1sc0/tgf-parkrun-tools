@@ -11,39 +11,17 @@ const userName = process.env.UNAME;
 const password = process.env.PWORD;
 
 //set values
-const filepath = './_Experiments/';
-const filename = 'list.csv';
-const outputname = '_dataTGFcounts.csv';
 const eventNum = 2927; //TGF parkrun event ID
-const athletes = [];
+const athletes = [633637];
 
 // authenticate and grab eventDetails (to get total events count) and then process results
 Parkrun.auth(userName, password, async function (client, err) {
   if (!err) {
-    fs.createReadStream(filepath + filename)
-      .pipe(
-        parse({
-          delimiter: ',',
-          columns: true,
-          ltrim: true,
-        })
-      )
-      .on('data', function (row) {
-        // This will push the object row into the array
-        athletes.push(row);
-      })
-      .on('error', function (error) {
-        console.log(error.message);
-      })
-      .on('end', function () {
-        // do stuff with the data, in another function
-        processDetails(athletes, client);
-      });
+    processDetails(athletes, client);
   } else console.log(err);
 });
 
 function processDetails(athletes, client) {
-  console.log('parsed csv data:');
   athletesNew = [];
   let i = 1;
 
@@ -57,7 +35,7 @@ function processDetails(athletes, client) {
       athletesNew.push(athlete);
       console.log(i, athlete);
       if (i === athletes.length) {
-        writeCSV(athletesNew);
+        console.log(athletesNew);
       }
       i++;
     });
@@ -90,24 +68,4 @@ function limiter(fn, wait) {
 
     caller();
   };
-}
-
-function writeCSV(athletesNew) {
-  //take athletes object and turn into an array then write back out to csv
-  const athletesCSV = [
-    ['ID', 'FullName', 'TGFRunCount', 'TGFVolCount'],
-    ...athletesNew.map(athlete => [
-      athlete.athleteID,
-      athlete.athleteFullName,
-      athlete.athleteTGFrunCount,
-      athlete.athleteTGFvolCount,
-    ]),
-  ]
-    .map(e => e.join(','))
-    .join('\n');
-
-  //console.log(athletesCSV);
-  fs.writeFile(filepath + outputname, athletesCSV, err => {
-    console.log(err || outputname + ' created successfully!');
-  });
 }

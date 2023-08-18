@@ -51,17 +51,13 @@ function processDetails(athletes, client) {
   const getAthleteLimited = limiter(async athlete => {
     await client.getAthlete(athlete.athleteID).then(async res => {
       athlete.athleteFullName = await res.getFullName();
-      //TGFcountsObj = await res.getTGFCounts(eventNum);
       countsObj = await res.getCounts();
-      //athlete.athleteTGFrunCount = TGFcountsObj.TGFrunCount;
-      //athlete.athleteTGFvolCount = TGFcountsObj.TGFvolCount;
       athlete.athleteRunCount = countsObj.runCount;
       athlete.athleteVolCount = countsObj.volCount;
 
       athletesNew.push(athlete);
       console.log(i, athlete);
       if (i === athletes.length) {
-        //console.log(athletesNew);
         writeCSV(athletesNew);
       }
       i++;
@@ -100,31 +96,12 @@ function limiter(fn, wait) {
 function writeCSV(athletesNew) {
   //take athletes object and turn into an array then write back out to csv
   const athletesCSV = [
-    [
-      'ID',
-      'FullName',
-      //'HomeID',
-      //'HomeName',
-      //'HomeGeoLon',
-      //'HomeGeoLat',
-      //'HomeCountry',
-      'RunCount',
-      'VolCount',
-      //'TGFRunCount',
-      //'TGFVolCount',
-    ],
+    ['ID', 'FullName', 'RunCount', 'VolCount'],
     ...athletesNew.map(athlete => [
       athlete.athleteID,
       athlete.athleteFullName,
-      //athlete.athleteHomeID,
-      //athlete.athleteHomeName,
-      //athlete.athleteHomeGeoLon,
-      //athlete.athleteHomeGeoLat,
-      //athlete.athleteHomeCountry,
       athlete.athleteRunCount,
       athlete.athleteVolCount,
-      //athlete.athleteTGFrunCount,
-      //athlete.athleteTGFvolCount,
     ]),
   ]
     .map(e => e.join(','))

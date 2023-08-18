@@ -64,17 +64,10 @@ function processDetails(athletes, client) {
 
       athlete.athleteFullName = await res.getFullName();
       athlete.athleteClub = await res.getClubName();
-      //TGFcountsObj = await res.getTGFCounts(eventNum);
-      //countsObj = await res.getCounts();
-      //athlete.athleteTGFrunCount = TGFcountsObj.TGFrunCount;
-      //athlete.athleteTGFvolCount = TGFcountsObj.TGFvolCount;
-      //athlete.athleteRunCount = countsObj.runCount;
-      //athlete.athleteVolCount = countsObj.volCount;
 
       athletesNew.push(athlete);
       console.log(i, athlete);
       if (i === athletes.length) {
-        //console.log(athletesNew);
         writeCSV(athletesNew);
       }
       i++;
@@ -122,10 +115,6 @@ function writeCSV(athletesNew) {
       'HomeGeoLon',
       'HomeGeoLat',
       'HomeCountry',
-      //'RunCount',
-      //'VolCount',
-      //'TGFRunCount',
-      //'TGFVolCount',
     ],
     ...athletesNew.map(athlete => [
       athlete.athleteID,
@@ -136,10 +125,6 @@ function writeCSV(athletesNew) {
       athlete.athleteHomeGeoLon,
       athlete.athleteHomeGeoLat,
       athlete.athleteHomeCountry,
-      //athlete.athleteRunCount,
-      //athlete.athleteVolCount,
-      //athlete.athleteTGFrunCount,
-      //athlete.athleteTGFvolCount,
     ]),
   ]
     .map(e => e.join(','))
