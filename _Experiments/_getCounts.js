@@ -13,7 +13,6 @@ const password = process.env.PWORD;
 const filepath = './_Experiments/';
 const filename = 'list.csv';
 const outputname = '_dataCounts.csv';
-const eventNum = 2927; //TGF parkrun event ID
 const athletes = [];
 
 // authenticate and grab eventDetails (to get total events count) and then process results

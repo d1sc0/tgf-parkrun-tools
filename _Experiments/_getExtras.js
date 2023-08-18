@@ -10,8 +10,9 @@ const password = process.env.PWORD;
 
 //set values
 const filepath = './_Experiments/';
-const filename = 'shortlist.csv';
+const filename = 'list.csv';
 const outputname = '_dataExtras.csv';
+const eventNum = 2927; //TGF parkrun event ID
 const athletes = [];
 
 // authenticate and grab eventDetails (to get total events count) and then process results
@@ -48,8 +49,16 @@ function processDetails(athletes, client) {
     await client.getAthlete(athlete.athleteID).then(async res => {
       athlete.athleteFullName = await res.getFullName();
       athleteObj = await res.getAthleteExtras();
-      athlete.athleteClub = athleteObj.ClubName;
+      runs = await res.getRuns();
+      if (runs[runs.length - 1] === undefined) {
+        athlete.athleteFirstRun = 'not a runner!';
+      } else {
+        athlete.athleteFirstRun = runs[runs.length - 1]._event_name;
+      }
+      athlete.athleteClubName = athleteObj.ClubName;
       athlete.athleteRegDate = athleteObj.Created;
+
+      athlete.athleteTGFpb = await res.getTGFpb(eventNum);
 
       athletesNew.push(athlete);
       console.log(i, athlete);
@@ -92,12 +101,14 @@ function limiter(fn, wait) {
 function writeCSV(athletesNew) {
   //take athletes object and turn into an array then write back out to csv
   const athletesCSV = [
-    ['ID', 'FullName', 'ClubName', 'RegDate'],
+    ['ID', 'FullName', 'ClubName', 'TGFpb', 'RegDate', 'firstRunlocation'],
     ...athletesNew.map(athlete => [
       athlete.athleteID,
       athlete.athleteFullName,
       athlete.athleteClubName,
+      athlete.athleteTGFpb,
       athlete.athleteRegDate,
+      athlete.athleteFirstRun,
     ]),
   ]
     .map(e => e.join(','))

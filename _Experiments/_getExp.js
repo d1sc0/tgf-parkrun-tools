@@ -32,7 +32,7 @@ function processDetails(athletes, client) {
   const getAthleteLimited = limiter(async athlete => {
     await client.getAthlete(athlete.athleteID).then(async res => {
       athlete.athleteFullName = await res.getFullName();
-      exp = await res.getAthleteRedux();
+      exp = await res.getTGFpb(eventNum);
       console.log(exp);
       //countsObj = await res.getCounts();
       //athlete.athleteRunCount = countsObj.runCount;
