@@ -12,7 +12,7 @@ const password = process.env.PWORD;
 
 //set values
 const eventNum = 2927; //TGF parkrun event ID
-const athletes = [633637];
+const athletes = [{ athleteID: 633637 }];
 
 // authenticate and grab eventDetails (to get total events count) and then process results
 Parkrun.auth(userName, password, async function (client, err) {
@@ -35,7 +35,7 @@ function processDetails(athletes, client) {
       athletesNew.push(athlete);
       console.log(i, athlete);
       if (i === athletes.length) {
-        console.log(athletesNew);
+        //console.log(athletesNew);
       }
       i++;
     });
