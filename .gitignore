@@ -76,4 +76,6 @@ _JnrResults
 _JnrRosters
 _Latest
 
-_Experiments/*.csv
+_Experiments/_dataCounts.csv
+_Experiments/_dataHomeRuns.csv
+_Experiments/_dataTGFcounts.csv
