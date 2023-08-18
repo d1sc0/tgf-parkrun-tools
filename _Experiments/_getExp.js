@@ -12,7 +12,11 @@ const password = process.env.PWORD;
 
 //set values
 const eventNum = 2927; //TGF parkrun event ID
-const athletes = [{ athleteID: 633637 }];
+const athletes = [
+  { athleteID: 8689614 },
+  { athleteID: 633637 },
+  { athleteID: 7831711 },
+];
 
 // authenticate and grab eventDetails (to get total events count) and then process results
 Parkrun.auth(userName, password, async function (client, err) {
@@ -28,9 +32,11 @@ function processDetails(athletes, client) {
   const getAthleteLimited = limiter(async athlete => {
     await client.getAthlete(athlete.athleteID).then(async res => {
       athlete.athleteFullName = await res.getFullName();
-      TGFcountsObj = await res.getTGFCounts(eventNum);
-      athlete.athleteTGFrunCount = TGFcountsObj.TGFrunCount;
-      athlete.athleteTGFvolCount = TGFcountsObj.TGFvolCount;
+      exp = await res.getAthleteRedux();
+      console.log(exp);
+      //countsObj = await res.getCounts();
+      //athlete.athleteRunCount = countsObj.runCount;
+      //athlete.athleteVolCount = countsObj.volCount;
 
       athletesNew.push(athlete);
       console.log(i, athlete);

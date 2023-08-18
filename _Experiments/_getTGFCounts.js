@@ -1,8 +1,6 @@
 const fs = require('fs');
 const { parse } = require('csv-parse');
 const Parkrun = require('tweaked_parkrun_js');
-// const { countries } = require('./location_data/countries_data.js');
-const { events } = require('./location_data/event_data.js');
 const dotenv = require('dotenv');
 dotenv.config();
 

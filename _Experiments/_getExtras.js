@@ -1,7 +1,6 @@
 const fs = require('fs');
 const { parse } = require('csv-parse');
 const Parkrun = require('tweaked_parkrun_js');
-const { events } = require('./location_data/event_data.js');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -11,9 +10,8 @@ const password = process.env.PWORD;
 
 //set values
 const filepath = './_Experiments/';
-const filename = 'list.csv';
-const outputname = '_dataHomeRuns.csv';
-const eventNum = 2927; //TGF parkrun event ID
+const filename = 'shortlist.csv';
+const outputname = '_dataExtras.csv';
 const athletes = [];
 
 // authenticate and grab eventDetails (to get total events count) and then process results
@@ -48,20 +46,10 @@ function processDetails(athletes, client) {
 
   const getAthleteLimited = limiter(async athlete => {
     await client.getAthlete(athlete.athleteID).then(async res => {
-      athlete.athleteHomeID = res._homeRun._id;
-      athlete.athleteHomeName = res._homeRun._name;
-      const byId = item => item.id === athlete.athleteHomeID;
-      if (events.find(byId)) {
-        athlete.athleteHomeGeoLon = events.find(byId).geometry.coordinates[0];
-        athlete.athleteHomeGeoLat = events.find(byId).geometry.coordinates[1];
-        athlete.athleteHomeCountry = events.find(byId).properties.countrycode;
-      } else {
-        athlete.athleteHomeGeoLat = null;
-        athlete.athleteHomeGeoLon = null;
-        athlete.athleteHomeCountry = null;
-      }
-
       athlete.athleteFullName = await res.getFullName();
+      athleteObj = await res.getAthleteExtras();
+      athlete.athleteClub = athleteObj.ClubName;
+      athlete.athleteRegDate = athleteObj.Created;
 
       athletesNew.push(athlete);
       console.log(i, athlete);
@@ -104,23 +92,12 @@ function limiter(fn, wait) {
 function writeCSV(athletesNew) {
   //take athletes object and turn into an array then write back out to csv
   const athletesCSV = [
-    [
-      'ID',
-      'FullName',
-      'HomeID',
-      'HomeName',
-      'HomeGeoLon',
-      'HomeGeoLat',
-      'HomeCountry',
-    ],
+    ['ID', 'FullName', 'ClubName', 'RegDate'],
     ...athletesNew.map(athlete => [
       athlete.athleteID,
       athlete.athleteFullName,
-      athlete.athleteHomeID,
-      athlete.athleteHomeName,
-      athlete.athleteHomeGeoLon,
-      athlete.athleteHomeGeoLat,
-      athlete.athleteHomeCountry,
+      athlete.athleteClubName,
+      athlete.athleteRegDate,
     ]),
   ]
     .map(e => e.join(','))
