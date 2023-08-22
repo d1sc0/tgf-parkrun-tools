@@ -48,15 +48,19 @@ function processDetails(athletes, client) {
   const getAthleteLimited = limiter(async athlete => {
     await client.getAthlete(athlete.athleteID).then(async res => {
       athlete.athleteFullName = await res.getFullName();
-      athleteObj = await res.getAthleteExtras();
-      runs = await res.getRuns();
-      if (runs[runs.length - 1] === undefined) {
-        athlete.athleteFirstRun = 'not a runner!';
-      } else {
-        athlete.athleteFirstRun = runs[runs.length - 1]._event_name;
-      }
-      athlete.athleteClubName = athleteObj.ClubName;
-      athlete.athleteRegDate = athleteObj.Created;
+
+      await res.getAthleteExtras().then(athleteObj => {
+        athlete.athleteClubName = athleteObj.ClubName;
+        athlete.athleteRegDate = athleteObj.Created;
+      });
+
+      await res.getRuns().then(runs => {
+        if (runs[runs.length - 1] === undefined) {
+          athlete.athleteFirstRun = 'not a runner!';
+        } else {
+          athlete.athleteFirstRun = runs[runs.length - 1]._event_name;
+        }
+      });
 
       athlete.athleteTGFpb = await res.getTGFpb(eventNum);
 
