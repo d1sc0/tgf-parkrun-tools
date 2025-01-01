@@ -20,7 +20,8 @@ if (!fs.existsSync(runResults)) {
 Parkrun.auth(userName, password, function (client, err) {
   if (!err) {
     getParkrunEvent(client).then(eventDetails => {
-      processResults(eventDetails._totalEvents);
+      console.log(eventDetails);
+      processResults(eventDetails._totalEvents - 3); //hack the -3 whilst TotalEvents number isn't accurate - maybe cancellations?
     });
   } else console.log(err);
 });
