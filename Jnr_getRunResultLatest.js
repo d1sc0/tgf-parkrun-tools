@@ -21,7 +21,7 @@ Parkrun.auth(userName, password, function (client, err) {
   if (!err) {
     getParkrunEvent(client).then(eventDetails => {
       console.log(eventDetails);
-      processResults(eventDetails._totalEvents - 3); //hack the -3 whilst TotalEvents number isn't accurate - maybe cancellations?
+      processResults(eventDetails._totalEvents);
     });
   } else console.log(err);
 });
