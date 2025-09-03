@@ -137,6 +137,8 @@ function processEvent(data) {
     //set runnerID by removing everything but digits, also handle unknowns
     if (typeof runnerURL !== 'null') {
       runnerID = runnerURL.replace(/\D+/, '');
+      // Removes a trailing slash if present
+      runnerID = runnerID.replace(/\/$/, '');
     }
 
     //null values for unknowns

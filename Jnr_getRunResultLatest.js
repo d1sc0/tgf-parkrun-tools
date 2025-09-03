@@ -137,6 +137,8 @@ function processEvent(data) {
     //set runnerID by removing everything but digits, also handle unknowns
     if (typeof runnerURL !== 'null') {
       runnerID = runnerURL.replace(/\D+/, '');
+      // Removes a trailing slash if present
+      runnerID = runnerID.replace(/\/$/, '');
     }
 
     //null values for unknowns
@@ -165,7 +167,8 @@ function processEvent(data) {
     if (runnerSex == 'Female') {
       runnerSex = 'W';
     }
-
+    // fix odd runner URL issue present from run 199 onwards
+    runnerURL = 'https://www.parkrun.org.uk' + runnerURL;
     // create an array of results
     //add data to a csv row
     result = [
