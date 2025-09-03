@@ -124,14 +124,18 @@ function processEvent(data) {
     }
     //runnerTime = runnerTime + '.000';
     a = runnerTime.split(':'); // split it at the colons
+
     // minutes are worth 60 seconds. Hours are worth 60 minutes.
     var seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
 
+    // set runnerTime to seconds for easier sorting later (needed 199 onwards)
     runnerTime = seconds;
 
     //set runnerID by removing everything but digits, also handle unknowns
     if (typeof runnerURL !== 'null') {
       runnerID = runnerURL.replace(/\D+/, '');
+      // Removes a trailing slash if present
+      runnerID = runnerID.replace(/\/$/, '');
     }
 
     //null values for unknowns
@@ -150,7 +154,7 @@ function processEvent(data) {
       runnerSexPos = data(item)
         .find('.Results-table-td--gender :not(.compact)')
         .text();
-      runnerSexPos = runnerSexPos.replace(/\D+/, '');
+      runnerSexPos = runnerSexPos.replace(/\D+/g, '');
     }
 
     // Swapping gender for Sex (as is used in age groups)
@@ -160,6 +164,9 @@ function processEvent(data) {
     if (runnerSex == 'Female') {
       runnerSex = 'W';
     }
+
+    // fix odd runner URL issue present from run 199 onwards
+    runnerURL = 'https://www.parkrun.org.uk' + runnerURL;
 
     // create an array of results
     //add data to a csv row

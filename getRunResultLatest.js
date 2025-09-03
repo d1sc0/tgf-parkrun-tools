@@ -166,6 +166,9 @@ function processEvent(data) {
       runnerSex = 'W';
     }
 
+    // fix odd runner URL issue present from run 199 onwards
+    runnerURL = 'https://www.parkrun.org.uk' + runnerURL;
+
     // create an array of results
     //add data to a csv row
     result = [
