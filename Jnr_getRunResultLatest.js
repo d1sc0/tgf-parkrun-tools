@@ -16,25 +16,32 @@ if (!fs.existsSync(runResults)) {
   fs.mkdirSync(runResults);
 }
 
+// get latest event numbers from eventNums.json
+const latestEventNums = readJsonSync('eventNums.json', {});
+const adultEventNum = latestEventNums.adultEventNum;
+const junEventNum = latestEventNums.junEventNum;
+
 // authenticate and grab eventDetails (to get total events count)
 Parkrun.auth(userName, password, function (client, err) {
   if (!err) {
     getParkrunEvent(client).then(eventDetails => {
       // console.log(eventDetails);
-      processResults(eventDetails._totalEvents);
+      processResults();
     });
   } else console.log(err);
 });
 
 // process All results
-async function processResults(totalEvents) {
+async function processResults() {
   let allResults = [];
-  let eventNum = totalEvents;
-  await getResultData(eventNum).then(data => {
+  await getResultData(junEventNum).then(data => {
     const resultRows = processEvent(data);
     allResults = allResults.concat(resultRows);
     if (allResults.length > 0) {
-      console.log('Run stats for event ' + eventNum + ' successfully parsed!');
+      console.log(
+        'Run stats for event ' + junEventNum + ' successfully parsed!'
+      );
+      //
     } else console.log('error parsing junior run result');
   });
   writeCsv('/JTGF-latest-results', allResults);
@@ -76,7 +83,7 @@ async function getParkrunEvent(client) {
 async function getResultData(eventNum) {
   try {
     const response = await axios.get(
-      'https://www.parkrun.org.uk/thegreatfield-juniors/results/' + eventNum,
+      'https://www.parkrun.org.uk/thegreatfield-juniors/results/' + junEventNum,
       {
         headers: {
           'User-Agent':
@@ -104,8 +111,8 @@ function processEvent(data) {
   eventMonth = eDate.substring(3, 5);
   eventDay = eDate.substring(0, 2);
   const eventDate = eventYear + '-' + eventMonth + '-' + eventDay;
-  const eventNum = $eventHTML.find('.Results-header h3 span:eq(2)').text();
-  const eventNumber = eventNum.replace(/\D+/g, '');
+  //const eventNum = $eventHTML.find('.Results-header h3 span:eq(2)').text();
+  const eventNumber = junEventNum;
 
   //set values for each table results row
   $rows.each(function (i, item) {
@@ -169,8 +176,10 @@ function processEvent(data) {
     }
     // fix odd runner URL issue present from run 199 onwards
     runnerURL = 'https://www.parkrun.org.uk' + runnerURL;
+
     // create an array of results
     //add data to a csv row
+
     result = [
       eventNumber,
       eventDate,
@@ -194,4 +203,14 @@ function processEvent(data) {
   });
   //end items loops
   return resultRows;
+}
+
+function readJsonSync(filePath, defaultValue = null) {
+  try {
+    const txt = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(txt);
+  } catch (err) {
+    if (err.code === 'ENOENT') return defaultValue; // missing file
+    throw err; // rethrow parse or other errors
+  }
 }

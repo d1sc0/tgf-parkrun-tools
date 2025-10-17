@@ -14,27 +14,35 @@ const parkrunEventId = process.env.EVENTID;
 const runResults = './_Latest';
 if (!fs.existsSync(runResults)) {
   fs.mkdirSync(runResults);
+  clear;
 }
+
+// get latest event numbers from eventNums.json
+const latestEventNums = readJsonSync('eventNums.json', {});
+const adultEventNum = latestEventNums.adultEventNum;
+const junEventNum = latestEventNums.junEventNum;
 
 // authenticate and grab eventDetails (to get total events count)
 Parkrun.auth(userName, password, function (client, err) {
   if (!err) {
     getParkrunEvent(client).then(eventDetails => {
-      //console.log(eventDetails);
-      processResults(eventDetails._totalEvents);
+      // console.log(eventDetails);
+      processResults();
     });
   } else console.log(err);
 });
 
 // process All results
-async function processResults(totalEvents) {
+async function processResults() {
   let allResults = [];
-  let eventNum = totalEvents;
-  await getResultData(eventNum).then(data => {
+  await getResultData(adultEventNum).then(data => {
     const resultRows = processEvent(data);
     allResults = allResults.concat(resultRows);
     if (allResults.length > 0) {
-      console.log('Run stats for event ' + eventNum + ' successfully parsed!');
+      console.log(
+        'Run stats for event ' + adultEventNum + ' successfully parsed!'
+      );
+      //
     } else console.log('error parsing adult run result');
   });
   writeCsv('/TGF-latest-results', allResults);
@@ -73,10 +81,10 @@ async function getParkrunEvent(client) {
 }
 
 // scrape data for single event
-async function getResultData(eventNum) {
+async function getResultData(adultEventNum) {
   try {
     const response = await axios.get(
-      'https://www.parkrun.org.uk/thegreatfield/results/' + eventNum,
+      'https://www.parkrun.org.uk/thegreatfield/results/' + adultEventNum,
       {
         headers: {
           'User-Agent':
@@ -104,8 +112,8 @@ function processEvent(data) {
   eventMonth = eDate.substring(3, 5);
   eventDay = eDate.substring(0, 2);
   const eventDate = eventYear + '-' + eventMonth + '-' + eventDay;
-  const eventNum = $eventHTML.find('.Results-header h3 span:eq(2)').text();
-  const eventNumber = eventNum.replace(/\D+/g, '');
+  //const eventNum = $eventHTML.find('.Results-header h3 span:eq(2)').text();
+  const eventNumber = adultEventNum;
 
   //set values for each table results row
   $rows.each(function (i, item) {
@@ -196,4 +204,14 @@ function processEvent(data) {
   });
   //end items loops
   return resultRows;
+}
+
+function readJsonSync(filePath, defaultValue = null) {
+  try {
+    const txt = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(txt);
+  } catch (err) {
+    if (err.code === 'ENOENT') return defaultValue; // missing file
+    throw err; // rethrow parse or other errors
+  }
 }

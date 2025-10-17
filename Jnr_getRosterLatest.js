@@ -16,11 +16,16 @@ if (!fs.existsSync(volResults)) {
   fs.mkdirSync(volResults);
 }
 
+// get latest event numbers from eventNums.json
+const latestEventNums = readJsonSync('eventNums.json', {});
+const adultEventNum = latestEventNums.adultEventNum;
+const junEventNum = latestEventNums.junEventNum;
+
 // authenticate and grab eventDetails (to get total events count) and then process results
 Parkrun.auth(userName, password, function (client, err) {
   if (!err) {
     getParkrunEvent(client).then(eventDetails => {
-      processVolunteers(eventDetails._totalEvents, client).then(allResults => {
+      processVolunteers(client).then(allResults => {
         writeCsv('/JTGF-latest-roster', allResults);
       });
     });
@@ -28,11 +33,10 @@ Parkrun.auth(userName, password, function (client, err) {
 });
 
 // process All results
-async function processVolunteers(totalEvents, client) {
+async function processVolunteers(client) {
   let allResults = [];
   //loop through event until you hit total events
-  let eventNum = totalEvents;
-  eventDate = await getResultData(eventNum);
+  eventDate = await getResultData(junEventNum);
   const [day, month, year] = eventDate.split('/');
   const eventDateStr = [year, month, day].join('');
   const eventDateStr2 = [year, month, day].join('-');
@@ -41,12 +45,12 @@ async function processVolunteers(totalEvents, client) {
     eventDate,
     eventDateStr,
     eventDateStr2,
-    eventNum
+    junEventNum
   ).then(rosterRows => {
     allResults = allResults.concat(rosterRows);
     //writeCsv('/TGF-volunteers-' + eventNum, rosterRows);
     console.log(
-      'Volunteer stats for event ' + eventNum + ' successfully parsed!'
+      'Volunteer stats for event ' + junEventNum + ' successfully parsed!'
     );
   });
 
@@ -82,14 +86,14 @@ async function getRosterDetails(
   eventDate,
   eventDateStr,
   eventDateStr2,
-  eventNum
+  junEventNum
 ) {
   rosterRows = client
     .getRoster(parkrunEventId, eventDateStr, eventDateStr2)
     .then(roster => {
       const data = [
         ...roster.map(item => [
-          eventNum,
+          junEventNum,
           eventDateStr2,
           item._athleteFirstName,
           item._athleteLastName,
@@ -106,10 +110,10 @@ async function getRosterDetails(
 }
 
 // scrape website data for dates
-async function getResultData(eventNum) {
+async function getResultData(junEventNum) {
   try {
     const response = await axios.get(
-      'https://www.parkrun.org.uk/thegreatfield-juniors/results/' + eventNum,
+      'https://www.parkrun.org.uk/thegreatfield-juniors/results/' + junEventNum,
       {
         headers: {
           'User-Agent':
@@ -126,5 +130,22 @@ async function getResultData(eventNum) {
     return eventDateStr;
   } catch (err) {
     console.log(err); // TypeError: failed to fetch
+  }
+}
+
+function writeJsonSync(filePath, data) {
+  const tmp = `${filePath}.tmp`;
+  const json = JSON.stringify(data, null, 2);
+  fs.writeFileSync(tmp, json, 'utf8'); // write to temp file
+  fs.renameSync(tmp, filePath); // atomic-ish replace
+}
+
+function readJsonSync(filePath, defaultValue = null) {
+  try {
+    const txt = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(txt);
+  } catch (err) {
+    if (err.code === 'ENOENT') return defaultValue; // missing file
+    throw err; // rethrow parse or other errors
   }
 }
